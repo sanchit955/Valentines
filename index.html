@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Valentine's Proposal</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto:wght@400;700&display=swap">
+  <style>
+    
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #ff3b6d, #ff6b6b);
+      font-family: 'Roboto', sans-serif;
+      overflow: hidden;
+    }
+
+    
+    .hearts {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .heart {
+      position: absolute;
+      opacity: 0;
+      animation: float 6s infinite linear;
+    }
+
+    .heart::before {
+      content: '❤';
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 24px;
+    }
+
+    
+    .initial-screen {
+      text-align: center;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      transform: scale(0);
+      animation: popIn 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+    }
+
+    
+    .card {
+      display: none;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 2.5rem;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      max-width: 500px;
+      transform: scale(0);
+      animation: popIn 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+    }
+
+    h1 {
+      font-family: 'Pacifico', cursive;
+      color: #ff3b6d;
+      font-size: 2.8rem;
+      margin: 0 0 1.5rem 0;
+    }
+
+    p {
+      font-size: 1.2rem;
+      line-height: 1.6;
+      color: #444;
+      margin: 1.5rem 0;
+    }
+
+    .buttons {
+      margin-top: 2rem;
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    button {
+      padding: 1rem 2.5rem;
+      border: none;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 700;
+    }
+
+    #yesBtn {
+      background: #ff3b6d;
+      color: white;
+    }
+
+    #yesBtn:hover {
+      background: #ff1a4d;
+      transform: scale(1.05);
+      box-shadow: 0 5px 15px rgba(255, 59, 109, 0.4);
+    }
+
+    #noBtn {
+      background: #f0f0f0;
+      color: #666;
+    }
+
+    #noBtn:hover {
+      background: #e0e0e0;
+      transform: scale(1.05);
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0); }
+      80% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes float {
+      0% {
+        opacity: 0;
+        transform: translateY(100vh) rotate(0deg);
+      }
+      20% { opacity: 1; }
+      100% {
+        opacity: 0;
+        transform: translateY(-100vh) rotate(360deg);
+      }
+    }
+  </style>
+</head>
+<body>
+  
+  <div class="hearts" id="hearts"></div>
+
+  
+  <div class="initial-screen">
+    <h1>Hey There! 👋</h1>
+    <p>I've got something important to ask you...</p>
+    <div class="buttons">
+      <button id="initialYes">Tell Me</button>
+      <button id="initialNo">Not Now</button>
+    </div>
+  </div>
+
+  
+  <div class="card">
+    <h1>Will You Be My Valentine?</h1>
+    <p>Hey <span id="name"></span>,</p>
+    <p>In the algorithm of life, you're my optimal solution.<br>
+    I want to compile a future with you ❤️</p>
+    <div class="buttons">
+      <button id="finalYes">Yes, Absolutely! 💻❤️</button>
+      <button id="finalNo">Syntax Error😵‍💫</button>
+    </div>
+  </div>
+
+  <script>
+    
+    function createHearts() {
+      const heartsContainer = document.getElementById('hearts');
+      for (let i = 0; i < 20; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'heart';
+        heart.style.left = Math.random() * 100 + '%';
+        heart.style.animationDelay = Math.random() * 5 + 's';
+        heartsContainer.appendChild(heart);
+      }
+    }
+    createHearts();
+
+    
+    document.getElementById('initialYes').addEventListener('click', () => {
+      document.querySelector('.initial-screen').style.display = 'none';
+      document.querySelector('.card').style.display = 'block';
+    });
+
+    
+    function setupNoButton(button) {
+      button.addEventListener('mousemove', (e) => {
+        const rect = button.getBoundingClientRect();
+        const buttonCenterX = rect.left + rect.width/2;
+        const buttonCenterY = rect.top + rect.height/2;
+        const distance = Math.hypot(e.clientX - buttonCenterX, e.clientY - buttonCenterY);
+        
+        if (distance < 100) {
+          const newX = Math.random() * (window.innerWidth - button.offsetWidth);
+          const newY = Math.random() * (window.innerHeight - button.offsetHeight);
+          button.style.position = 'absolute';
+          button.style.left = `${newX}px`;
+          button.style.top = `${newY}px`;
+        }
+      });
+    }
+
+    
+    setupNoButton(document.getElementById('initialNo'));
+    setupNoButton(document.getElementById('finalNo'));
+
+    
+    document.getElementById('finalYes').addEventListener('click', () => {
+      alert('💖 Compiling happiness... 100% complete! You just made my heart skip a beat! 💖');
+    });
+  </script>
+</body>
+</html>
